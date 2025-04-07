@@ -84,6 +84,12 @@ class _RegisterEmailSectionState extends State<RegisterEmailSection> {
         _userEmail = _emailController.text;
         _initialState = false;
       });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProfileScreen(user: widget.auth.currentUser!),
+        ),
+      );
     } catch (e) {
       setState(() {
         _success = false;
@@ -237,6 +243,86 @@ class _EmailPasswordFormState extends State<EmailPasswordForm> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ProfileScreen extends StatelessWidget {
+  final User user;
+  const ProfileScreen({super.key, required this.user});
+
+  void _signOut(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MyHomePage(title: 'Firebase Auth Demo'),
+      ),
+    );
+  }
+
+  void _changePassword(BuildContext context) {
+    final TextEditingController _newPass = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text("Change Password"),
+        content: TextField(
+          controller: _newPass,
+          obscureText: true,
+          decoration: InputDecoration(labelText: "New Password"),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              if (_newPass.text.length >= 6) {
+                try {
+                  await user.updatePassword(_newPass.text);
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Password changed successfully")),
+                  );
+                } catch (e) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Error changing password")),
+                  );
+                }
+              }
+            },
+            child: Text("Update"),
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Profile"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () => _signOut(context),
+          )
+        ],
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Logged in as: ${user.email}", style: TextStyle(fontSize: 18)),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => _changePassword(context),
+              child: Text("Change Password"),
+            )
+          ],
+        ),
       ),
     );
   }
