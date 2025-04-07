@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "186328117922",
+    "project_id": "ic13henry",
+    "storage_bucket": "ic13henry.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:186328117922:android:e00d94786e1fc96e361dfb",
+        "android_client_info": {
+          "package_name": "com.example.ic_13"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDf1hUpi6DN6R7Kjx0Ih_NN-K0S9kEfrRY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
